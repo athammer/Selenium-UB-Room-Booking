@@ -7,6 +7,7 @@ from lxml import etree
 import re
 
 
+#edit so instead of sleep it continuely checks if element exists
 #http://selenium-python.readthedocs.io/locating-elements.html
 driver = webdriver.Chrome(
     '/home/athammer/bin/chromedriver')  # Optional argument, if not specified will search path.
@@ -22,7 +23,7 @@ driver.find_element_by_id("gaia_loginform").submit()
 time.sleep(.5)
 
 element = driver.find_element_by_id("login")
-element.send_keys("sdfg") # get rid of pass when submitting duh....
+element.send_keys("sdfg") # get rid of pass when submitting duh...
 element = driver.find_element_by_id("password")
 element.send_keys("sdfg")  # get rid of pass when submitting duh....
 driver.find_element_by_name("f").submit()
@@ -44,18 +45,18 @@ def run():
         else:
             print('error')
 
-    time.sleep(1)
+    time.sleep(.5)
 
     text = driver.find_element_by_class_name(("gs")).text
     url = re.search("(http:\/\/booking\.lib\.buffalo\.edu\/confirm\.php\?i=.+\|.+&c=.{10})", text)
     driver.get(url.group(0));
 
-    time.sleep(1)
+    time.sleep(.5)
 
     driver.find_element_by_id("rm_confirm_link").click()
     driver.get_screenshot_as_file('/home/athammer/Pictures/confirmation.png')
 
-    time.sleep(1)
+    time.sleep(.5)
 
     driver.get("https://groupme.com/signin")
     element = driver.find_element_by_id("signinUserNameInput")
@@ -64,11 +65,11 @@ def run():
     element.send_keys("sdfg")  # get rid of pass when submitting duh....
     driver.find_element_by_class_name("login").click()
 
-    time.sleep(1)
+    time.sleep(.5)
 
     text = driver.find_elements_by_class_name("chat-name")
     for x in text:
-        if (x.text == "bot testing"):
+        if (x.text == "Rooms Confirmations Only"):
             x.click()
 
     time.sleep(.5)
@@ -79,12 +80,19 @@ def run():
 
     driver.find_element_by_class_name("send").click()
     print("email sent")
+    time.sleep(30)
+    #driver.get("https://mail.google.com/") will open the confirmation email change this
     run()
 
 while(True):
+    time.sleep(.1)
     try:
         run()
     except NoSuchElementException:
+        driver.get("https://mail.google.com/mail/u/0/#inbox");
+        time.sleep(.7)
         print('email not found most likely')
     else:
+        driver.get("https://mail.google.com/mail/u/0/#inbox");
+        time.sleep(.7)
         print('email not found most likely')
